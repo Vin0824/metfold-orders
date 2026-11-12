@@ -49,6 +49,8 @@ html, body {
   letter-spacing: 0.01em;
   color: var(--header);
 }
+.upd-ago { margin-left:8px; padding:2px 8px; border-radius:999px; background:#ecfdf3; color:#067647; font-weight:600; }
+.upd-ago.stale { background:#fef3f2; color:#b42318; }
 .as-of {
   margin: 6px 0 0;
   color: var(--muted);
@@ -224,7 +226,7 @@ tr.empty td { color: var(--muted); font-style: italic; text-align: left; }
     <header class="topbar">
       <div class="brand">
         <h1>Metfold Orders</h1>
-        <p class="as-of">As of 12 Nov 2026 4:10 PM Melbourne / 10:40 AM IST</p>
+        <p class="as-of">As of 12 Nov 2026 4:10 PM Melbourne / 10:40 AM IST <span class="upd-ago" id="upd-ago" data-ms="1794460200000"></span></p>
       </div>
       <button type="button" class="save-btn" id="save-jpg">Save as JPG</button>
     </header>
@@ -792,6 +794,15 @@ tr.empty td { color: var(--muted); font-style: italic; text-align: left; }
 
   var btn = document.getElementById("save-jpg");
   if (btn) btn.addEventListener("click", saveJpg);
+})();
+
+
+(function(){
+  var el=document.getElementById('upd-ago'); if(!el) return; var ms=parseInt(el.getAttribute('data-ms'),10); if(!ms) return;
+  function tick(){ var s=Math.max(0,Math.floor((Date.now()-ms)/1000)); var m=Math.floor(s/60), h=Math.floor(m/60);
+    var t = s<60 ? 'Updated just now' : (h>=1 ? 'Updated '+h+'h '+(m%60)+'m ago' : 'Updated '+m+' min ago');
+    el.textContent=t; el.className='upd-ago'+(m>=20?' stale':''); }
+  tick(); setInterval(tick,15000);
 })();
 
   </script>
